@@ -9,9 +9,11 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DisconnectButton } from "./disconnect-button";
 
 const ERROR_MESSAGES: Record<string, string> = {
   invalid_state: "인증 요청이 만료되었거나 위조되었습니다. 다시 시도해주세요.",
@@ -64,6 +66,9 @@ async function InstagramAccountsList({
                   {new Date(account.connected_at).toLocaleDateString("ko-KR")}
                 </CardDescription>
               </CardHeader>
+              <CardFooter>
+                <DisconnectButton accountId={account.id} username={account.username} />
+              </CardFooter>
             </Card>
           ))
         ) : (
