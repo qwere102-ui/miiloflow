@@ -20,7 +20,7 @@ env:
       - RUNTIME
 
   - variable: META_APP_ID
-    value: "1524302669729698"
+    value: "1380390684190547"
     availability:
       - RUNTIME
 
