@@ -69,7 +69,7 @@ export default function ProtectedPage() {
         <div>
           <h1 className="text-2xl font-bold">대시보드</h1>
           <p className="text-sm text-muted-foreground">
-            InstaFlow 계정 및 자동화 현황을 한눈에 확인하세요.
+            MiiloFlow 계정 및 자동화 현황을 한눈에 확인하세요.
           </p>
         </div>
         <div className="flex gap-2">

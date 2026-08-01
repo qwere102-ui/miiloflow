@@ -51,7 +51,7 @@ export default function Home() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10">
           <div className="w-full max-w-5xl flex flex-wrap gap-y-2 justify-between items-center p-3 px-5 text-sm">
             <Link href="/" className="font-semibold text-base">
-              InstaFlow
+              MiiloFlow
             </Link>
             {!hasEnvVars ? (
               <EnvVarWarning />
@@ -75,7 +75,7 @@ export default function Home() {
           </h1>
           <p className="text-muted-foreground text-lg max-w-xl">
             게시물에 달린 댓글을 감지해 자동으로 DM을 보내고, 팔로우 여부에 따라
-            다른 메시지를 전달하세요. InstaFlow가 반응부터 전환까지 자동화합니다.
+            다른 메시지를 전달하세요. MiiloFlow가 반응부터 전환까지 자동화합니다.
           </p>
           <div className="flex gap-3 mt-2">
             <Button asChild size="lg">
@@ -106,7 +106,7 @@ export default function Home() {
         </section>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-10 text-muted-foreground">
-          <p>InstaFlow</p>
+          <p>MiiloFlow</p>
           <ThemeSwitcher />
         </footer>
       </div>

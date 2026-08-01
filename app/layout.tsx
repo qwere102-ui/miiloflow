@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "InstaFlow — 인스타그램 댓글·DM 자동화",
+  title: "MiiloFlow — 인스타그램 댓글·DM 자동화",
   description: "댓글을 감지해 자동으로 DM을 보내고, 팔로우 여부에 따라 메시지를 분기하는 인스타그램 자동화 서비스.",
 };
 
