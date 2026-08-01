@@ -1,0 +1,56 @@
+runConfig:
+  minInstances: 0
+
+env:
+  - variable: NEXT_PUBLIC_SUPABASE_URL
+    value: "https://cpaoxlqopiagtflircot.supabase.co"
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    value: "sb_publishable_HA2SGYgUZCAHjGZRbSG8UQ_ni8ZgxHm"
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: SUPABASE_SERVICE_ROLE_KEY
+    secret: SUPABASE_SERVICE_ROLE_KEY
+    availability:
+      - RUNTIME
+
+  - variable: META_APP_ID
+    value: "1524302669729698"
+    availability:
+      - RUNTIME
+
+  - variable: META_APP_SECRET
+    secret: META_APP_SECRET
+    availability:
+      - RUNTIME
+
+  - variable: META_VERIFY_TOKEN
+    secret: META_VERIFY_TOKEN
+    availability:
+      - RUNTIME
+
+  - variable: META_REDIRECT_URI
+    value: "https://miiloflow---miiloflow.asia-southeast1.hosted.app/api/instagram/callback"
+    availability:
+      - RUNTIME
+
+  - variable: META_API_VERSION
+    value: "v23.0"
+    availability:
+      - RUNTIME
+
+  - variable: TOKEN_ENCRYPTION_KEY
+    secret: TOKEN_ENCRYPTION_KEY
+    availability:
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_APP_URL
+    value: "https://miiloflow---miiloflow.asia-southeast1.hosted.app"
+    availability:
+      - BUILD
+      - RUNTIME
