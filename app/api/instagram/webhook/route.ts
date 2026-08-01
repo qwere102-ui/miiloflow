@@ -18,12 +18,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
   const signature = request.headers.get("x-hub-signature-256");
+  const sigValid = verifyWebhookSignature(rawBody, signature);
+  console.log(`[webhook] POST received, signatureValid=${sigValid}, bodyLen=${rawBody.length}`);
 
-  if (!verifyWebhookSignature(rawBody, signature)) {
+  if (!sigValid) {
     return new NextResponse("Invalid signature", { status: 401 });
   }
 
   const payload = JSON.parse(rawBody);
+  console.log(`[webhook] object=${payload.object}, entries=${payload.entry?.length ?? 0}`);
   if (payload.object === "instagram" && Array.isArray(payload.entry)) {
     for (const entry of payload.entry) {
       try {

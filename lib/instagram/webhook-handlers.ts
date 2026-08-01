@@ -52,7 +52,11 @@ async function handleCommentEvent(
   igBusinessId: string,
   value: CommentChangeValue,
 ) {
-  if (!value.from || !value.media) return;
+  console.log(`[webhook] comment event: igBusinessId=${igBusinessId}, from=${value.from?.id}, media=${value.media?.id}, text=${value.text}`);
+  if (!value.from || !value.media) {
+    console.log("[webhook] comment event missing from/media, skipping");
+    return;
+  }
 
   const { data: account } = await supabase
     .from("instagram_accounts")
@@ -60,16 +64,23 @@ async function handleCommentEvent(
     .eq("ig_user_id", igBusinessId)
     .eq("is_active", true)
     .single();
-  if (!account) return;
+  if (!account) {
+    console.log(`[webhook] no active instagram_accounts row for ig_user_id=${igBusinessId}`);
+    return;
+  }
 
   // Ignore comments made by the connected business account itself.
-  if (value.from.id === account.ig_user_id) return;
+  if (value.from.id === account.ig_user_id) {
+    console.log("[webhook] comment from the business account itself, skipping");
+    return;
+  }
 
   const { data: automations } = await supabase
     .from("automations")
     .select("*")
     .eq("instagram_account_id", account.id)
     .eq("is_active", true);
+  console.log(`[webhook] found ${automations?.length ?? 0} active automations for account ${account.id}`);
   if (!automations?.length) return;
 
   const commentText = value.text ?? "";
@@ -83,6 +94,7 @@ async function handleCommentEvent(
         commentText.toLowerCase().includes(k.toLowerCase()),
       );
     });
+  console.log(`[webhook] matched automation: ${matched?.id ?? "none"}`);
   if (!matched) return;
 
   const { data: commentEvent, error: insertError } = await supabase
