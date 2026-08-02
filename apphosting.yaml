@@ -29,6 +29,11 @@ env:
     availability:
       - RUNTIME
 
+  - variable: META_WEBHOOK_APP_SECRET
+    secret: META_WEBHOOK_APP_SECRET
+    availability:
+      - RUNTIME
+
   - variable: META_VERIFY_TOKEN
     secret: META_VERIFY_TOKEN
     availability:

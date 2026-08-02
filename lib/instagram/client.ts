@@ -231,7 +231,9 @@ export function verifyWebhookSignature(
   signatureHeader: string | null,
 ): boolean {
   if (!signatureHeader?.startsWith("sha256=")) return false;
-  const expected = createHmac("sha256", requireEnv("META_APP_SECRET"))
+  // Webhook payloads are signed with the app's top-level Basic Settings
+  // secret, not the Instagram-product-specific secret used for OAuth.
+  const expected = createHmac("sha256", requireEnv("META_WEBHOOK_APP_SECRET"))
     .update(rawBody, "utf8")
     .digest("hex");
   const provided = signatureHeader.slice("sha256=".length);
