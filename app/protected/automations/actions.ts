@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { automationSchema, parseKeywords } from "@/lib/validation/automation";
+import { decryptToken } from "@/lib/crypto";
+import { sendTextMessage } from "@/lib/instagram/client";
 
 export async function createAutomation(formData: FormData) {
   const raw = Object.fromEntries(formData.entries());
@@ -91,6 +93,56 @@ export async function updateAutomation(formData: FormData) {
 
   revalidatePath("/protected/automations");
   redirect("/protected/automations");
+}
+
+export async function sendTestMessage(formData: FormData) {
+  const automationId = String(formData.get("automationId"));
+  const recipientId = String(formData.get("recipientId") ?? "").trim();
+
+  const supabase = await createClient();
+  const { data: userData, error: authError } = await supabase.auth.getClaims();
+  if (authError || !userData?.claims) {
+    redirect("/auth/login");
+  }
+
+  if (!recipientId) {
+    redirect(
+      `/protected/automations/${automationId}/edit?testError=${encodeURIComponent("받는 사람 Instagram ID를 입력하세요")}`,
+    );
+  }
+
+  const { data: automation } = await supabase
+    .from("automations")
+    .select("dm_initial_message, instagram_accounts(ig_user_id, access_token_encrypted)")
+    .eq("id", automationId)
+    .single();
+
+  const account = automation?.instagram_accounts as unknown as
+    | { ig_user_id: string; access_token_encrypted: string }
+    | undefined;
+
+  if (!automation || !account) {
+    redirect(
+      `/protected/automations/${automationId}/edit?testError=${encodeURIComponent("자동화 또는 연결된 계정을 찾을 수 없습니다")}`,
+    );
+  }
+
+  try {
+    const accessToken = decryptToken(account.access_token_encrypted);
+    await sendTextMessage(
+      account.ig_user_id,
+      accessToken,
+      recipientId,
+      automation.dm_initial_message,
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "알 수 없는 오류";
+    redirect(
+      `/protected/automations/${automationId}/edit?testError=${encodeURIComponent(message)}`,
+    );
+  }
+
+  redirect(`/protected/automations/${automationId}/edit?testSuccess=1`);
 }
 
 export async function toggleAutomationAction(formData: FormData) {
